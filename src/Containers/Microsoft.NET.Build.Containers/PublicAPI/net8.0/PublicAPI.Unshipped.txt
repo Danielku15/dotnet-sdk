@@ -262,6 +262,8 @@ Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.Docker = 0 -> Microso
 Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.OpenContainerInitiative = 1 -> Microsoft.NET.Build.Containers.ContainerImageArchiveFormat
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.PushImageToRegistry() -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ContainerizeDirectory.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ContainerizeDirectory.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.get -> string!
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Registry.get -> string!
@@ -270,6 +272,10 @@ Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.get -> strin
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.get -> string![]?
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.set -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ToolExe.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ToolExe.set -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ToolPath.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ToolPath.set -> void
 override Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Execute() -> bool
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Cancel() -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Dispose() -> void

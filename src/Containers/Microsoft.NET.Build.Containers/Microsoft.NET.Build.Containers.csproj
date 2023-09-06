@@ -45,8 +45,11 @@
     <Compile Include="ReferenceParser.cs" />
     <Compile Include="KnownStrings.cs" />
     <Compile Include="Tasks/ParseContainerProperties.cs" />
+    <Compile Include="Tasks/ContainerizeToolTask.cs" />
     <Compile Include="Tasks/CreateNewImage.Interface.cs" />
     <Compile Include="Tasks/CreateNewImageToolTask.cs" />
+    <Compile Include="Tasks/PushImageToRegistry.Interface.cs" />
+    <Compile Include="Tasks/PushImageToRegistryToolTask.cs" />
     <Compile Include="Tasks/ComputeDotnetBaseImageTag.cs" />
     <Compile Include="ContainerHelpers.cs" />
     <Compile Include="ContainerImageArchiveFormat.cs" />
@@ -61,7 +64,9 @@
 
   <!-- core remove files specific to net472 workarounds -->
   <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+    <Compile Remove="Tasks/ContainerizeToolTask.cs" />
     <Compile Remove="Tasks/CreateNewImageToolTask.cs" />
+    <Compile Remove="Tasks/PushImageToRegistryToolTask.cs" />
     <Compile Remove="net472Definitions.cs" />
     <Compile Remove="VSHostObject.cs" />
   </ItemGroup>

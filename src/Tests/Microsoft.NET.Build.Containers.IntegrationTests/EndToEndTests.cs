@@ -1,11 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Tar;
 using System.Runtime.CompilerServices;
 using Microsoft.DotNet.Cli.Utils;
 using Microsoft.NET.Build.Containers.LocalDaemons;
 using Microsoft.NET.Build.Containers.Resources;
 using Microsoft.NET.Build.Containers.UnitTests;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Microsoft.NET.Build.Containers.IntegrationTests;
@@ -131,8 +133,7 @@ public class EndToEndTests : IDisposable
 
     public async Task ApiEndToEndWithDockerArchiveWritingAndLoad()
     {
-        DestinationImageReference destinationReference = await CreateImageArchiveAsync(ContainerImageArchiveFormat.Docker,
-            new[] { "latest", "1.0" });
+        DestinationImageReference destinationReference = await CreateImageArchiveAsync(ContainerImageArchiveFormat.Docker);
 
         // Load the archive
         ContainerCli.LoadCommand(_testOutput, "--input", ((ArchiveFileRegistry)destinationReference.LocalRegistry!).ArchiveOutputPath)
@@ -153,43 +154,39 @@ public class EndToEndTests : IDisposable
 
     public async Task ApiEndToEndWithOciArchiveWritingAndLoad()
     {
-        DestinationImageReference destinationReference = await CreateImageArchiveAsync(ContainerImageArchiveFormat.OpenContainerInitiative, new[]
+        DestinationImageReference destinationReference = await CreateImageArchiveAsync(ContainerImageArchiveFormat.OpenContainerInitiative);
+
+        ILogger logger = _loggerFactory.CreateLogger(nameof(ApiEndToEndWithOciArchiveWritingAndLoad));
+        Registry registry = new(DockerRegistryManager.LocalRegistry, logger);
+
+        // extract tar
+        string extractedTarPath = Path.Combine(TestSettings.TestArtifactsDirectory,
+            nameof(ApiEndToEndWithOciArchiveWritingAndLoad), "tar-extracted");
+        Directory.CreateDirectory(extractedTarPath);
+        await TarFile.ExtractToDirectoryAsync(
+            ((ArchiveFileRegistry)destinationReference.LocalRegistry!).ArchiveOutputPath, extractedTarPath, true);
+
+        // push to local registry with same name and tags
+        DestinationImageReference localRegistryDestination = new (registry, destinationReference.Repository, destinationReference.Tags);
+        await registry.PushAsync(extractedTarPath, localRegistryDestination, default);
+
+
+        foreach (string tag in localRegistryDestination.Tags)
         {
-            "latest"
-        });
+            // pull it back locally
+            ContainerCli.PullCommand(_testOutput, $"{DockerRegistryManager.LocalRegistry}/{localRegistryDestination.Repository}:{tag}")
+                .Execute()
+                .Should().Pass();
 
-        // Docker cannot load OCI archives and we currently also cannot push OCI containers to registries ourselves
-        // so we import the archive with skopeo to the test registry, pull the image from there and run it.
-
-        // org.opencontainers.image.ref.name is not respected by skopeo on pushes, so we use a custom image name
-
-        FileInfo archiveOutput = new(((ArchiveFileRegistry)destinationReference.LocalRegistry!).ArchiveOutputPath);
-        string archiveParent = archiveOutput.DirectoryName!;
-        string archiveMountPath = OperatingSystem.IsWindows()
-            ? "/" + archiveParent.Replace(":", "").Replace("\\", "/")
-            : archiveParent;
-
-        string newImageNameWithTag = NewImageName() + ":latest";
-        string dockerHost = ContainerCli.IsPodman ? "host.containers.internal" : "host.docker.internal";
-        ContainerCli.RunCommand(_testOutput, $"-v", $"{archiveMountPath}:/data", "--rm", "--tty", "quay.io/skopeo/stable:latest",
-                "copy", "--dest-tls-verify=false", "--format", "oci", $"oci-archive:/data/{archiveOutput.Name}", $"docker://{dockerHost}:{DockerRegistryManager.LocalRegistryPort}/{newImageNameWithTag}")
-            .Execute()
-            .Should().Pass();
-
-        // pull it back locally
-        ContainerCli.PullCommand(_testOutput, $"{DockerRegistryManager.LocalRegistry}/{newImageNameWithTag}")
-            .Execute()
-            .Should().Pass();
-
-        // Run the image
-        ContainerCli.RunCommand(_testOutput, "--rm", "--tty", $"{DockerRegistryManager.LocalRegistry}/{newImageNameWithTag}")
-            .Execute()
-            .Should().Pass();
+            // Run the image
+            ContainerCli.RunCommand(_testOutput, "--rm", "--tty", $"{DockerRegistryManager.LocalRegistry}/{localRegistryDestination.Repository}:{tag}")
+                .Execute()
+                .Should().Pass();
+        }
     }
 
     private async Task<DestinationImageReference> CreateImageArchiveAsync(
         ContainerImageArchiveFormat format,
-        string[] tags,
         [CallerMemberName] string testName = "TestName")
     {
         ILogger logger = _loggerFactory.CreateLogger(testName);
@@ -220,7 +217,7 @@ public class EndToEndTests : IDisposable
         var sourceReference = new SourceImageReference(registry, DockerRegistryManager.RuntimeBaseImage,
             DockerRegistryManager.Net7ImageTag);
         var destinationReference = new DestinationImageReference(
-            KnownLocalRegistryTypes.CreateLocalRegistry(archiveFile, format), NewImageName(), tags);
+            KnownLocalRegistryTypes.CreateLocalRegistry(archiveFile, format), NewImageName(), new[] { "latest", "1.0" });
 
         await destinationReference.LocalRegistry!.LoadAsync(builtImage, sourceReference, destinationReference, default)
             .ConfigureAwait(false);

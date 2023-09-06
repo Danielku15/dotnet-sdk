@@ -445,7 +445,8 @@ internal sealed class Registry
         // build list of blobs with their digests
         IEnumerable<(string digest, string filePath)> blobs =
             Directory.EnumerateDirectories(Path.Combine(extractedOciArchivePath, "blobs"))
-                .SelectMany(d => Directory.EnumerateFiles(d).Select(f => (Path.GetFileName(d) + Path.GetFileName(f), f)));
+                .SelectMany(d => Directory.EnumerateFiles(d).Select(f => (
+                    $"{Path.GetFileName(d)}:{Path.GetFileName(f)}", f)));
 
         if (SupportsParallelUploads)
         {

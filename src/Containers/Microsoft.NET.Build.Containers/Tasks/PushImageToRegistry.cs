@@ -12,6 +12,16 @@ namespace Microsoft.NET.Build.Containers.Tasks;
 
 public sealed partial class PushImageToRegistry : Microsoft.Build.Utilities.Task, ICancelableTask, IDisposable
 {
+    /// <summary>
+    /// Unused. For interface parity with the ToolTask implementation of the task.
+    /// </summary>
+    public string ToolExe { get; set; }
+
+    /// <summary>
+    /// Unused. For interface parity with the ToolTask implementation of the task.
+    /// </summary>
+    public string ToolPath { get; set; }
+
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public void Cancel() => _cancellationTokenSource.Cancel();
@@ -99,6 +109,7 @@ public sealed partial class PushImageToRegistry : Microsoft.Build.Utilities.Task
         try
         {
             string path = Path.Combine(ContentStore.TempPath, $"extract-{Guid.NewGuid():N}");
+            Directory.CreateDirectory(path);
             await TarFile.ExtractToDirectoryAsync(archivePath, path, true, cancellationToken);
             return path;
         }

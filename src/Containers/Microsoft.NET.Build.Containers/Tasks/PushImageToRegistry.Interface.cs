@@ -8,6 +8,14 @@ namespace Microsoft.NET.Build.Containers.Tasks;
 partial class PushImageToRegistry
 {
     /// <summary>
+    /// The path to the folder containing `containerize.dll`.
+    /// </summary>
+    /// <remarks>
+    /// Used only for the ToolTask implementation of this task.
+    /// </remarks>
+    public string ContainerizeDirectory { get; set; }
+
+    /// <summary>
     /// The path to the OCI image archive to push to the registry.
     /// </summary>
     [Required]
@@ -34,9 +42,11 @@ partial class PushImageToRegistry
     [Required]
     public string[]? ImageTags { get; set; }
 
-
     public PushImageToRegistry()
     {
+        ContainerizeDirectory = "";
+        ToolExe = "";
+        ToolPath = "";
         ArchivePath = "";
         Registry = "";
     }

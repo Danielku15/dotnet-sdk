@@ -89,10 +89,7 @@ Microsoft.NET.Build.Containers.Tasks.CreateNewImage.RuntimeIdentifierGraphPath.s
 Microsoft.NET.Build.Containers.Tasks.CreateNewImage.WorkingDirectory.get -> string!
 Microsoft.NET.Build.Containers.Tasks.CreateNewImage.WorkingDirectory.set -> void
 override Microsoft.NET.Build.Containers.Tasks.ComputeDotnetBaseImageTag.Execute() -> bool
-override Microsoft.NET.Build.Containers.Tasks.CreateNewImage.ToolName.get -> string!
 override Microsoft.NET.Build.Containers.Tasks.CreateNewImage.GenerateCommandLineCommands() -> string!
-override Microsoft.NET.Build.Containers.Tasks.CreateNewImage.GenerateFullPathToTool() -> string!
-override Microsoft.NET.Build.Containers.Tasks.CreateNewImage.GetProcessStartInfo(string! pathToTool, string! commandLineCommands, string! responseFileSwitch) -> System.Diagnostics.ProcessStartInfo!
 Microsoft.NET.Build.Containers.Tasks.ParseContainerProperties
 Microsoft.NET.Build.Containers.Tasks.ParseContainerProperties.ContainerEnvironmentVariables.get -> Microsoft.Build.Framework.ITaskItem![]!
 Microsoft.NET.Build.Containers.Tasks.ParseContainerProperties.ContainerEnvironmentVariables.set -> void
@@ -122,6 +119,8 @@ Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.Docker = 0 -> Microso
 Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.OpenContainerInitiative = 1 -> Microsoft.NET.Build.Containers.ContainerImageArchiveFormat
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.PushImageToRegistry() -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ContainerizeDirectory.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ContainerizeDirectory.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.get -> string!
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Registry.get -> string!
@@ -130,6 +129,9 @@ Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.get -> strin
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.set -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.get -> string![]?
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.set -> void
-override Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Execute() -> bool
-Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Cancel() -> void
-Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Dispose() -> void
+override Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.GenerateCommandLineCommands() -> string!
+Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask
+Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.ContainerizeToolTask() -> void
+override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.ToolName.get -> string!
+override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.GenerateFullPathToTool() -> string!
+override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.GetProcessStartInfo(string! pathToTool, string! commandLineCommands, string! responseFileSwitch) -> System.Diagnostics.ProcessStartInfo!
