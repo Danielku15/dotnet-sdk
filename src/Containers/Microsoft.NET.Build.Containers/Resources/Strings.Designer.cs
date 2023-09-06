@@ -628,6 +628,15 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3001: &apos;{0}&apos; and &apos;{1}&apos; cannot be specified partially. Specify none to load information from archive, or both to override the archive values..
+        /// </summary>
+        internal static string RepositoryAndTagsProvidedPartially {
+            get {
+                return ResourceManager.GetString("RepositoryAndTagsProvidedPartially", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONTAINER4003: Required &apos;{0}&apos; items contain empty items..
         /// </summary>
         internal static string RequiredItemsContainsEmptyItems {

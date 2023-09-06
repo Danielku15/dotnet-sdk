@@ -327,6 +327,23 @@
     <value>CONTAINER2029: ContainerEntrypointArgsSet are provided. Change to use ContainerAppCommandArgs for arguments that must always be set, or ContainerDefaultArgs for arguments that can be overridden when the container is created.</value>
     <comment>{StrBegin="CONTAINER2029: "}</comment>
   </data>
+  <data name="RepositoryAndTagsProvidedPartially" xml:space="preserve">
+    <value>CONTAINER3001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</value>
+    <comment>{StrBegin="CONTAINER3001: "}</comment>
+  </data>
+  <data name="ArchiveExtractionFailed" xml:space="preserve">
+    <value>CONTAINER3002: Failed to load extract image archive: {0}.</value>
+    <comment>{StrBegin="CONTAINER3002: "}</comment>
+  </data>
+  <data name="LoadingRepositoryAndTagsFromArchiveFailed" xml:space="preserve">
+    <value>CONTAINER3003: Failed to load image information from archive: {0}.</value>
+    <comment>{StrBegin="CONTAINER3003: "}</comment>
+  </data>
+  <data name="ArchiveCleanupFailed" xml:space="preserve">
+    <value>CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</value>
+    <comment>{StrBegin="CONTAINER3004: "}</comment>
+  </data>
+
   <data name="_Test" xml:space="preserve">
     <value>CONTAINER0000: Value for unit test {0}</value>
     <comment>Used only for unit tests</comment>

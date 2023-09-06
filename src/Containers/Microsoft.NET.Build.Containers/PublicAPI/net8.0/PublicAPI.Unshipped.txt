@@ -260,3 +260,16 @@ Microsoft.NET.Build.Containers.ManifestListV2.Deconstruct(out int schemaVersion,
 Microsoft.NET.Build.Containers.ContainerImageArchiveFormat
 Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.Docker = 0 -> Microsoft.NET.Build.Containers.ContainerImageArchiveFormat
 Microsoft.NET.Build.Containers.ContainerImageArchiveFormat.OpenContainerInitiative = 1 -> Microsoft.NET.Build.Containers.ContainerImageArchiveFormat
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.PushImageToRegistry() -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ArchivePath.set -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Registry.get -> string!
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Registry.set -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.get -> string?
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Repository.set -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.get -> string![]?
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ImageTags.set -> void
+override Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Execute() -> bool
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Cancel() -> void
+Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Dispose() -> void

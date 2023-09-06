@@ -361,6 +361,13 @@ internal sealed class Registry
 
     }
 
+    public async Task PushAsync(string extractedOciArchivePath, DestinationImageReference destination, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        await Task.CompletedTask;
+        throw new NotImplementedException();
+    }
+
     public async Task PushAsync(BuiltImage builtImage, SourceImageReference source, DestinationImageReference destination, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

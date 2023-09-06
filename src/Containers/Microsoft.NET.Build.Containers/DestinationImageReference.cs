@@ -62,6 +62,16 @@ internal readonly record struct DestinationImageReference
         string repository,
         string[] imageTags,
         ILoggerFactory loggerFactory,
+        string outputRegistry)
+    {
+        return CreateFromSettings(repository, imageTags, loggerFactory, null,
+            ContainerImageArchiveFormat.OpenContainerInitiative /*not relevant*/, outputRegistry, null);
+    }
+
+    public static DestinationImageReference CreateFromSettings(
+        string repository,
+        string[] imageTags,
+        ILoggerFactory loggerFactory,
         string? archiveOutputPath,
         ContainerImageArchiveFormat archiveOutputFormat,
         string? outputRegistry,
