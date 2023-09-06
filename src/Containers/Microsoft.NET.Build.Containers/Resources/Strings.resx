@@ -374,13 +374,24 @@
   <data name="Registry_LayerExists" xml:space="preserve">
     <value>Layer '{0}' already exists.</value>
   </data>
+  <data name="Registry_BlobExists" xml:space="preserve">
+    <value>Blob '{0}' already exists.</value>
+  </data>
   <data name="Registry_LayerUploaded" xml:space="preserve">
     <value>Finished uploading layer '{0}' to '{1}'.</value>
     <comment>{0} is the layer digest, {1} is the registry name</comment>
   </data>
+  <data name="Registry_BlobUploaded" xml:space="preserve">
+    <value>Finished uploading blob '{0}' to '{1}'.</value>
+    <comment>{0} is the blob digest, {1} is the registry name</comment>
+  </data>
   <data name="Registry_LayerUploadStarted" xml:space="preserve">
     <value>Uploading layer '{0}' to '{1}'.</value>
     <comment>{0} is the layer digest, {1} is the registry name</comment>
+  </data>
+  <data name="Registry_BlobUploadStarted" xml:space="preserve">
+    <value>Uploading blob '{0}' to '{1}'.</value>
+    <comment>{0} is the blob digest, {1} is the registry name</comment>
   </data>
   <data name="Registry_ManifestUploaded" xml:space="preserve">
     <value>Uploaded manifest to '{0}'.</value>
@@ -397,6 +408,9 @@
   <data name="Registry_TagUploadStarted" xml:space="preserve">
     <value>Uploading tag '{0}' to '{1}'.</value>
     <comment>{1} is the registry name</comment>
+  </data>
+  <data name="Registry_BlobForManifestNotFound" xml:space="preserve">
+    <value>Could not find blob for manifest '{0}'.</value>
   </data>
   <data name="InvalidImageName_EntireNameIsInvalidCharacters" xml:space="preserve">
     <value>CONTAINER2005: The inferred image name '{0}' contains entirely invalid characters. The valid characters for an image name are alphanumeric characters, -, /, or _, and the image name must start with an alphanumeric character.</value>

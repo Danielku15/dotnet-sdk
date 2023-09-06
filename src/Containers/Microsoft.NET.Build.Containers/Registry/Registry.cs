@@ -6,6 +6,7 @@ using Microsoft.NET.Build.Containers.Resources;
 using NuGet.RuntimeModel;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Microsoft.NET.Build.Containers;
@@ -92,7 +93,8 @@ internal sealed class Registry
     /// <remarks>
     /// Google Artifact Registry locations (one for each availability zone) are of the form "ZONE-docker.pkg.dev".
     /// </remarks>
-    public bool IsGoogleArtifactRegistry {
+    public bool IsGoogleArtifactRegistry
+    {
         get => RegistryName.EndsWith("-docker.pkg.dev", StringComparison.Ordinal);
     }
 
@@ -153,7 +155,8 @@ internal sealed class Registry
         var runtimeGraph = GetRuntimeGraphForDotNet(runtimeIdentifierGraphPath);
         var ridManifestDict = GetManifestsByRid(manifestList);
         var bestManifestRid = GetBestMatchingRid(runtimeGraph, runtimeIdentifier, ridManifestDict.Keys);
-        if (bestManifestRid is null) {
+        if (bestManifestRid is null)
+        {
             throw new BaseImageNotFoundException(runtimeIdentifier, repositoryName, reference, ridManifestDict.Keys);
         }
         PlatformSpecificManifest matchingManifest = ridManifestDict[bestManifestRid];
@@ -170,7 +173,8 @@ internal sealed class Registry
     IReadOnlyDictionary<string, PlatformSpecificManifest> GetManifestsByRid(ManifestListV2 manifestList)
     {
         var ridDict = new Dictionary<string, PlatformSpecificManifest>();
-        foreach (var manifest in manifestList.manifests) {
+        foreach (var manifest in manifestList.manifests)
+        {
             if (CreateRidForPlatform(manifest.platform) is { } rid)
             {
                 ridDict.TryAdd(rid, manifest);
@@ -207,7 +211,7 @@ internal sealed class Registry
         // TODO: we _may_ need OS-specific version parsing. Need to do more research on what the field looks like across more manifest lists.
         var versionPart = platform.version?.Split('.') switch
         {
-            [var major, .. ] => major,
+            [var major, ..] => major,
             _ => null
         };
         var platformPart = platform.architecture switch
@@ -294,13 +298,13 @@ internal sealed class Registry
 
             int bytesRead = await contents.ReadAsync(chunkBackingStore, cancellationToken).ConfigureAwait(false);
 
-            ByteArrayContent content = new (chunkBackingStore, offset: 0, count: bytesRead);
+            ByteArrayContent content = new(chunkBackingStore, offset: 0, count: bytesRead);
             content.Headers.ContentLength = bytesRead;
 
             // manual because ACR throws an error with the .NET type {"Range":"bytes 0-84521/*","Reason":"the Content-Range header format is invalid"}
             //    content.Headers.Add("Content-Range", $"0-{contents.Length - 1}");
             Debug.Assert(content.Headers.TryAddWithoutValidation("Content-Range", $"{chunkStart}-{chunkStart + bytesRead - 1}"));
-            
+
             NextChunkUploadInformation nextChunk = await _registryAPI.Blob.Upload.UploadChunkAsync(patchUri, content, cancellationToken).ConfigureAwait(false);
             patchUri = nextChunk.UploadUri;
 
@@ -364,8 +368,96 @@ internal sealed class Registry
     public async Task PushAsync(string extractedOciArchivePath, DestinationImageReference destination, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        await Task.CompletedTask;
-        throw new NotImplementedException();
+
+        string indexJsonPath = Path.Combine(extractedOciArchivePath, "index.json");
+        OciImageIndex index = await OciImageIndex.LoadFromFileAsync(indexJsonPath, cancellationToken).ConfigureAwait(false);
+
+        Dictionary<string, ManifestV2> tagToManifestLookup = new();
+        foreach (OciImageManifestDescriptor manifest in index.Manifests)
+        {
+            if (manifest.Annotations?.TryGetValue(OciAnnotations.AnnotationRefName, out var refName) != true || refName == null)
+            {
+                refName = Guid.NewGuid().ToString();
+            }
+
+
+            string manifestPath = Path.Combine(extractedOciArchivePath, "blobs", manifest.Digest.Replace(':', Path.DirectorySeparatorChar));
+            if (!File.Exists(manifestPath))
+            {
+                _logger.LogError(Strings.Registry_BlobForManifestNotFound, manifest.Digest);
+                return;
+            }
+
+            await using FileStream manifestStream = File.OpenRead(manifestPath);
+            tagToManifestLookup[refName] =
+                await JsonSerializer.DeserializeAsync<ManifestV2>(manifestStream, cancellationToken: cancellationToken);
+        }
+
+        if (tagToManifestLookup.Count == 0)
+        {
+            _logger.LogError("Could not find any manifests in archive");
+            return;
+        }
+
+        await UploadBlobsAsync(extractedOciArchivePath, destination, cancellationToken);
+
+        foreach (string tag in destination.Tags)
+        {
+            // in case we use the tags and repositories from the index.json in pushes, we need to use the correct manifest
+            // for custom pushes we take the first manifest we can find. this is because we assume the archive was generated
+            // by this SDK where all manifests are the same
+            if (!tagToManifestLookup.TryGetValue($"{destination.Repository}:{tag}", out var manifest))
+            {
+                manifest = tagToManifestLookup.Values.First();
+            }
+
+            _logger.LogInformation(Strings.Registry_TagUploadStarted, tag, RegistryName);
+            await _registryAPI.Manifest.PutAsync(destination.Repository, tag, manifest, cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation(Strings.Registry_TagUploaded, tag, RegistryName);
+        }
+    }
+
+    private async Task UploadBlobsAsync(string extractedOciArchivePath, DestinationImageReference destination, CancellationToken cancellationToken)
+    {
+        Registry destinationRegistry = destination.RemoteRegistry!;
+        async Task UploadBlob((string digest, string filePath) blob)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            string digest = blob.digest;
+
+            _logger.LogInformation(Strings.Registry_BlobUploadStarted, digest, destinationRegistry.RegistryName);
+            if (await _registryAPI.Blob.ExistsAsync(destination.Repository, digest, cancellationToken)
+                    .ConfigureAwait(false))
+            {
+                _logger.LogInformation(Strings.Registry_BlobExists, digest);
+                return;
+            }
+
+            // Then push it to the destination registry
+            await using (Stream contents = File.OpenRead(blob.filePath))
+            {
+                await UploadBlobAsync(destination.Repository, digest, contents, cancellationToken).ConfigureAwait(false);
+            }
+            _logger.LogInformation(Strings.Registry_LayerUploaded, digest, destinationRegistry.RegistryName);
+        }
+
+        // build list of blobs with their digests
+        IEnumerable<(string digest, string filePath)> blobs =
+            Directory.EnumerateDirectories(Path.Combine(extractedOciArchivePath, "blobs"))
+                .SelectMany(d => Directory.EnumerateFiles(d).Select(f => (Path.GetFileName(d) + Path.GetFileName(f), f)));
+
+        if (SupportsParallelUploads)
+        {
+            await Task.WhenAll(blobs.Select(UploadBlob)).ConfigureAwait(false);
+        }
+        else
+        {
+            foreach (var blob in blobs)
+            {
+                await UploadBlob(blob).ConfigureAwait(false);
+            }
+        }
     }
 
     public async Task PushAsync(BuiltImage builtImage, SourceImageReference source, DestinationImageReference destination, CancellationToken cancellationToken)
@@ -373,7 +465,7 @@ internal sealed class Registry
         cancellationToken.ThrowIfCancellationRequested();
         Registry destinationRegistry = destination.RemoteRegistry!;
 
-        Func<Descriptor, Task> uploadLayerFunc = async (descriptor) =>
+        async Task UploadLayer(Descriptor descriptor)
         {
             cancellationToken.ThrowIfCancellationRequested();
             string digest = descriptor.Digest;
@@ -386,7 +478,7 @@ internal sealed class Registry
             }
 
             // Blob wasn't there; can we tell the server to get it from the base image?
-            if (! await _registryAPI.Blob.Upload.TryMountAsync(destination.Repository, source.Repository, digest, cancellationToken).ConfigureAwait(false))
+            if (!await _registryAPI.Blob.Upload.TryMountAsync(destination.Repository, source.Repository, digest, cancellationToken).ConfigureAwait(false))
             {
                 // The blob wasn't already available in another namespace, so fall back to explicitly uploading it
 
@@ -398,21 +490,22 @@ internal sealed class Registry
                     await destinationRegistry.PushLayerAsync(Layer.FromDescriptor(descriptor), destination.Repository, cancellationToken).ConfigureAwait(false);
                     _logger.LogInformation(Strings.Registry_LayerUploaded, digest, destinationRegistry.RegistryName);
                 }
-                else {
+                else
+                {
                     throw new NotImplementedException(Resource.GetString(nameof(Strings.MissingLinkToRegistry)));
                 }
             }
-        };
+        }
 
         if (SupportsParallelUploads)
         {
-            await Task.WhenAll(builtImage.LayerDescriptors.Select(descriptor => uploadLayerFunc(descriptor))).ConfigureAwait(false);
+            await Task.WhenAll(builtImage.LayerDescriptors.Select(UploadLayer)).ConfigureAwait(false);
         }
         else
         {
-            foreach(var descriptor in builtImage.LayerDescriptors)
+            foreach (var descriptor in builtImage.LayerDescriptors)
             {
-                await uploadLayerFunc(descriptor).ConfigureAwait(false);
+                await UploadLayer(descriptor).ConfigureAwait(false);
             }
         }
 

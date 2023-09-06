@@ -183,11 +183,6 @@ public sealed partial class PushImageToRegistry : Microsoft.Build.Utilities.Task
         try
         {
             string indexJsonPath = Path.Combine(extractedPath, "index.json");
-            if (!File.Exists(indexJsonPath))
-            {
-                throw new FormatException("No index.json found");
-            }
-
             return await TryLoadDestinationsFromOciIndexAsync(indexJsonPath, loggerFactory, cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -207,17 +202,9 @@ public sealed partial class PushImageToRegistry : Microsoft.Build.Utilities.Task
         }
     }
 
-    private async Task<DestinationImageReference[]?> TryLoadDestinationsFromOciIndexAsync(string indexPath, ILoggerFactory loggerFactory, CancellationToken cancellationToken)
+    private async Task<DestinationImageReference[]?> TryLoadDestinationsFromOciIndexAsync(string indexJsonPath, ILoggerFactory loggerFactory, CancellationToken cancellationToken)
     {
-        await using FileStream indexStream = File.OpenRead(indexPath);
-        OciImageIndex index = await JsonSerializer.DeserializeAsync<OciImageIndex>(indexStream,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        if (index.SchemaVersion != 2 || index.MediaType != "application/vnd.oci.image.index.v1+json")
-        {
-            throw new FormatException("index.json did not have the expected version and media type");
-        }
-
+        OciImageIndex index = await OciImageIndex.LoadFromFileAsync(indexJsonPath, cancellationToken).ConfigureAwait(false);
         return LoadAndValidateRepositoryWithTags(index)
             .GroupBy(t => t.repository)
             .Select(t => DestinationImageReference.CreateFromSettings(t.Key,

@@ -529,6 +529,42 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blob &apos;{0}&apos; already exists..
+        /// </summary>
+        internal static string Registry_BlobExists {
+            get {
+                return ResourceManager.GetString("Registry_BlobExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find blob for manifest &apos;{0}&apos;..
+        /// </summary>
+        internal static string Registry_BlobForManifestNotFound {
+            get {
+                return ResourceManager.GetString("Registry_BlobForManifestNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished uploading blob &apos;{0}&apos; to &apos;{1}&apos;..
+        /// </summary>
+        internal static string Registry_BlobUploaded {
+            get {
+                return ResourceManager.GetString("Registry_BlobUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading blob &apos;{0}&apos; to &apos;{1}&apos;..
+        /// </summary>
+        internal static string Registry_BlobUploadStarted {
+            get {
+                return ResourceManager.GetString("Registry_BlobUploadStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploaded config to registry..
         /// </summary>
         internal static string Registry_ConfigUploaded {

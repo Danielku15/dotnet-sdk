@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.NET.Build.Containers;
@@ -42,6 +43,25 @@ internal readonly record struct OciImageIndex
     /// </summary>
     [JsonPropertyName("annotations")]
     public Dictionary<string, string>? Annotations { get; init; }
+
+    public static async Task<OciImageIndex> LoadFromFileAsync(string file, CancellationToken cancellationToken)
+    {
+        if (!File.Exists(file))
+        {
+            throw new FileNotFoundException("index.json not found", file);
+        }
+
+        await using FileStream indexStream = File.OpenRead(file);
+        OciImageIndex index = await JsonSerializer.DeserializeAsync<OciImageIndex>(indexStream,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        if (index.SchemaVersion != 2 || index.MediaType != "application/vnd.oci.image.index.v1+json")
+        {
+            throw new FormatException("index.json did not have the expected version and media type");
+        }
+
+        return index;
+    }
 }
 
 
