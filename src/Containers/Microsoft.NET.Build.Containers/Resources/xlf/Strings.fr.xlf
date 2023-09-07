@@ -22,6 +22,16 @@
         <target state="translated">CONTAINER2026: ContainerAppCommand et ContainerAppCommandArgs doivent être vides lorsque ContainerAppCommandInstruction est '{0}'.</target>
         <note>{StrBegin="CONTAINER2026: "}</note>
       </trans-unit>
+      <trans-unit id="ArchiveCleanupFailed">
+        <source>CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</source>
+        <target state="new">CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</target>
+        <note>{StrBegin="CONTAINER3004: "}</note>
+      </trans-unit>
+      <trans-unit id="ArchiveExtractionFailed">
+        <source>CONTAINER3002: Failed to load extract image archive: {0}.</source>
+        <target state="new">CONTAINER3002: Failed to load extract image archive: {0}.</target>
+        <note>{StrBegin="CONTAINER3002: "}</note>
+      </trans-unit>
       <trans-unit id="ArchiveRegistry_PushInfo">
         <source>local archive at '{0}' as {1} </source>
         <target state="new">local archive at '{0}' as {1} </target>
@@ -217,6 +227,11 @@
         <target state="translated">CONTAINER4005: l’élément '{0}' contient des éléments sans métadonnées 'Value'. Ils seront ignorés.</target>
         <note>{StrBegin="CONTAINER4005: "}</note>
       </trans-unit>
+      <trans-unit id="LoadingRepositoryAndTagsFromArchiveFailed">
+        <source>CONTAINER3003: Failed to load image information from archive: {0}.</source>
+        <target state="new">CONTAINER3003: Failed to load image information from archive: {0}.</target>
+        <note>{StrBegin="CONTAINER3003: "}</note>
+      </trans-unit>
       <trans-unit id="LocalRegistryNotAvailable">
         <source>CONTAINER1012: The local registry is not available, but pushing to a local registry was requested.</source>
         <target state="translated">CONTAINER1012: Le registre local n'est pas disponible, mais la transmission vers un registre local a été demandée.</target>
@@ -267,6 +282,26 @@
         <target state="translated">CONTAINER1005: échec de l’envoi (push) du Registre ; code d’état « {0} » reçu.</target>
         <note>{StrBegin="CONTAINER1005: "}</note>
       </trans-unit>
+      <trans-unit id="Registry_BlobExists">
+        <source>Blob '{0}' already exists.</source>
+        <target state="new">Blob '{0}' already exists.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Registry_BlobForManifestNotFound">
+        <source>Could not find blob for manifest '{0}'.</source>
+        <target state="new">Could not find blob for manifest '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Registry_BlobUploadStarted">
+        <source>Uploading blob '{0}' to '{1}'.</source>
+        <target state="new">Uploading blob '{0}' to '{1}'.</target>
+        <note>{0} is the blob digest, {1} is the registry name</note>
+      </trans-unit>
+      <trans-unit id="Registry_BlobUploaded">
+        <source>Finished uploading blob '{0}' to '{1}'.</source>
+        <target state="new">Finished uploading blob '{0}' to '{1}'.</target>
+        <note>{0} is the blob digest, {1} is the registry name</note>
+      </trans-unit>
       <trans-unit id="Registry_ConfigUploadStarted">
         <source>Uploading config to registry at blob '{0}',</source>
         <target state="translated">Chargement de la configuration dans le Registre sur l’objet blob «{0}»,</target>
@@ -311,6 +346,11 @@
         <source>Uploaded tag '{0}' to '{1}'.</source>
         <target state="translated">Balise «{0}» chargée sur «{1}».</target>
         <note>{1} is the registry name</note>
+      </trans-unit>
+      <trans-unit id="RepositoryAndTagsProvidedPartially">
+        <source>CONTAINER3001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</source>
+        <target state="new">CONTAINER3001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</target>
+        <note>{StrBegin="CONTAINER3001: "}</note>
       </trans-unit>
       <trans-unit id="RequiredItemsContainsEmptyItems">
         <source>CONTAINER4003: Required '{0}' items contain empty items.</source>

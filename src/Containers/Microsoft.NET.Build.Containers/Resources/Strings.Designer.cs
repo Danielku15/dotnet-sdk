@@ -106,6 +106,24 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3004: Failed to cleanup extracted archive after push: {0}..
+        /// </summary>
+        internal static string ArchiveCleanupFailed {
+            get {
+                return ResourceManager.GetString("ArchiveCleanupFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3002: Failed to load extract image archive: {0}..
+        /// </summary>
+        internal static string ArchiveExtractionFailed {
+            get {
+                return ResourceManager.GetString("ArchiveExtractionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to local archive at &apos;{0}&apos; as {1} .
         /// </summary>
         internal static string ArchiveRegistry_PushInfo {
@@ -453,6 +471,15 @@ namespace Microsoft.NET.Build.Containers.Resources {
         internal static string ItemsWithoutMetadata {
             get {
                 return ResourceManager.GetString("ItemsWithoutMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3003: Failed to load image information from archive: {0}..
+        /// </summary>
+        internal static string LoadingRepositoryAndTagsFromArchiveFailed {
+            get {
+                return ResourceManager.GetString("LoadingRepositoryAndTagsFromArchiveFailed", resourceCulture);
             }
         }
         
