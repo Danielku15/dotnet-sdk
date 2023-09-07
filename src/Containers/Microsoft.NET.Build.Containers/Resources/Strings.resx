@@ -343,6 +343,10 @@
     <value>CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</value>
     <comment>{StrBegin="CONTAINER3004: "}</comment>
   </data>
+  <data name="ArchivePushFailed" xml:space="preserve">
+    <value>CONTAINER3005: Failed to push archive to registry: {0}.</value>
+    <comment>{StrBegin="CONTAINER3005: "}</comment>
+  </data>
 
   <data name="_Test" xml:space="preserve">
     <value>CONTAINER0000: Value for unit test {0}</value>
@@ -423,5 +427,9 @@
   <data name="DockerCli_PushInfo" xml:space="preserve">
     <value>local registry via '{0}'</value>
     <comment>{0} is the command used</comment>
+  </data>
+    <data name="ErrorDetails" xml:space="preserve">
+    <value>Error Details '{0}'</value>
+    <comment>{0} is the exception</comment>
   </data>
 </root>

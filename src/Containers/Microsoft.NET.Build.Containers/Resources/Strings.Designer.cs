@@ -124,6 +124,15 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3005: Failed to push archive to registry: {0}..
+        /// </summary>
+        internal static string ArchivePushFailed {
+            get {
+                return ResourceManager.GetString("ArchivePushFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to local archive at &apos;{0}&apos; as {1} .
         /// </summary>
         internal static string ArchiveRegistry_PushInfo {
@@ -327,6 +336,15 @@ namespace Microsoft.NET.Build.Containers.Resources {
         internal static string EntrypointSetNoAppCommandInstruction {
             get {
                 return ResourceManager.GetString("EntrypointSetNoAppCommandInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error Details &apos;{0}&apos;.
+        /// </summary>
+        internal static string ErrorDetails {
+            get {
+                return ResourceManager.GetString("ErrorDetails", resourceCulture);
             }
         }
         

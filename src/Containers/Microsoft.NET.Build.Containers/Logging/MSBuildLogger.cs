@@ -5,6 +5,7 @@
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.NET.Build.Containers.Resources;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Microsoft.NET.Build.Containers.Logging;
@@ -44,6 +45,10 @@ internal sealed class MSBuildLogger : ILogger
             case LogLevel.Error:
             case LogLevel.Critical:
                 _loggingHelper.LogError(formatter(state, exception));
+                if (exception != null)
+                {
+                    _loggingHelper.LogMessage(MessageImportance.Low, Strings.ErrorDetails, exception);
+                }
                 break;
             case LogLevel.None:
                 break;

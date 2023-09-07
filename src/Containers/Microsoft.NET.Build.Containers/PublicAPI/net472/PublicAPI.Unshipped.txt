@@ -135,3 +135,8 @@ Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.ContainerizeToolTask()
 override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.ToolName.get -> string!
 override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.GenerateFullPathToTool() -> string!
 override Microsoft.NET.Build.Containers.Tasks.ContainerizeToolTask.GetProcessStartInfo(string! pathToTool, string! commandLineCommands, string! responseFileSwitch) -> System.Diagnostics.ProcessStartInfo!
+Microsoft.NET.Build.Containers.ImageArchivePusher
+Microsoft.NET.Build.Containers.ImageArchivePusher.ImagePusher(Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory, string! archivePath, string! registry, string? repository, string![]? imageTags) -> void
+Microsoft.NET.Build.Containers.ImageArchivePusher.PushAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Microsoft.NET.Build.Containers.ImageArchivePusher.ExitCode.get -> int
+Microsoft.NET.Build.Containers.ImageArchivePusher.HasErrors.get -> bool

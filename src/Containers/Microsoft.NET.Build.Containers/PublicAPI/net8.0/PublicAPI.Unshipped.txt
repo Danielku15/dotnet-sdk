@@ -279,3 +279,8 @@ Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.ToolPath.set -> void
 override Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Execute() -> bool
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Cancel() -> void
 Microsoft.NET.Build.Containers.Tasks.PushImageToRegistry.Dispose() -> void
+Microsoft.NET.Build.Containers.ImageArchivePusher
+Microsoft.NET.Build.Containers.ImageArchivePusher.ImageArchivePusher(Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory, string! archivePath, string! registry, string? repository, string![]? imageTags) -> void
+Microsoft.NET.Build.Containers.ImageArchivePusher.PushAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Microsoft.NET.Build.Containers.ImageArchivePusher.ExitCode.get -> int
+Microsoft.NET.Build.Containers.ImageArchivePusher.HasErrors.get -> bool

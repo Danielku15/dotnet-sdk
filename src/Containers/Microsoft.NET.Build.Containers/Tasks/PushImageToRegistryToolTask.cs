@@ -24,9 +24,26 @@ public partial class PushImageToRegistry : ContainerizeToolTask
 
         //mandatory options
         builder.AppendFileNameIfNotNull(Path.Combine(ContainerizeDirectory, "containerize.dll"));
-        builder.AppendSwitch(nameof(PushImageToRegistry));
+        builder.AppendSwitch("push");
+        builder.AppendSwitchIfNotNull("--archivepath ", ArchivePath);
+        builder.AppendSwitchIfNotNull("--registry ", Registry);
+        
+        //optional options
+        if (!string.IsNullOrWhiteSpace(Repository))
+        {
+           builder.AppendSwitchIfNotNull("--repository ", Repository);
+        }
+        
+        if (ImageTags != null)
+        {
+            if (ImageTags.Any(string.IsNullOrWhiteSpace))
+            {
+                Log.LogWarningWithCodeFromResources(nameof(Strings.EmptyOrWhitespacePropertyIgnored), nameof(ImageTags));
+            }
+            string[] sanitizedImageTags = ImageTags.Where(i => !string.IsNullOrWhiteSpace(i)).ToArray();
+            builder.AppendSwitchIfNotNull("--imagetags ", sanitizedImageTags, delimiter: " ");
+        }
 
-        // TODO
         return builder.ToString();
     }
 

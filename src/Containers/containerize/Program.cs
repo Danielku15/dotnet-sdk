@@ -2,30 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.CommandLine;
-using Microsoft.NET.Build.Containers.Tasks;
 
 namespace containerize;
 
 internal class Program
 {
-    private static readonly Dictionary<string, Func<CliRootCommand>> s_commandFactory = new(StringComparer.OrdinalIgnoreCase)
-    {
-        [nameof(CreateNewImage)] = () => new ContainerizeCommand(),
-        [nameof(PushImageToRegistry)] = () => new PushImageToRegistryCommand()
-    };
-
     private static Task<int> Main(string[] args)
     {
         try
         {
-            if (args.Length <= 0 || !s_commandFactory.TryGetValue(args[0], out var factory))
+            CliRootCommand rootCommand = new CliRootCommand("")
             {
-                string commands = string.Join(", ", s_commandFactory.Keys);
-                throw new ArgumentException($"Expected the first argument to be a valid command: {commands}");
-            }
+                new ContainerizeCommand(),
+                new PushImageToRegistryCommand()
+            };
 
-            CliRootCommand command = factory();
-            return command.Parse(args.Skip(1).ToArray()).InvokeAsync();
+            return rootCommand.Parse(args).InvokeAsync();
         }
         catch (Exception e)
         {

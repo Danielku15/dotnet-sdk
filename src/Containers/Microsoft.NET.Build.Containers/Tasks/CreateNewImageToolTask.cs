@@ -45,7 +45,7 @@ public partial class CreateNewImage : ContainerizeToolTask
 
         //mandatory options
         builder.AppendFileNameIfNotNull(Path.Combine(ContainerizeDirectory, "containerize.dll"));
-        builder.AppendSwitch(nameof(CreateNewImage));
+        builder.AppendSwitch("containerize");
         builder.AppendFileNameIfNotNull(PublishDirectory.TrimEnd(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }));
         builder.AppendSwitchIfNotNull("--baseregistry ", BaseRegistry);
         builder.AppendSwitchIfNotNull("--baseimagename ", BaseImageName);

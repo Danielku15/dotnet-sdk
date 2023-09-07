@@ -10,7 +10,7 @@ using Microsoft.NET.Build.Containers;
 
 namespace containerize;
 
-internal class ContainerizeCommand : CliRootCommand
+internal class ContainerizeCommand : CliCommand
 {
     internal CliArgument<DirectoryInfo> PublishDirectoryArgument { get; } = new CliArgument<DirectoryInfo>("PublishDirectory")
     {
@@ -191,7 +191,7 @@ internal class ContainerizeCommand : CliRootCommand
 
     internal CliOption<string> ContainerUserOption { get; } = new("--container-user") { Description = "User to run the container as." };
 
-    internal ContainerizeCommand() : base("Containerize an application without Docker.")
+    internal ContainerizeCommand() : base("containerize", "Containerize an application without Docker.")
     {
         PublishDirectoryArgument.AcceptLegalFilePathsOnly();
         this.Arguments.Add(PublishDirectoryArgument);
@@ -250,7 +250,7 @@ internal class ContainerizeCommand : CliRootCommand
             LogLevel verbosity = traceEnabled ? LogLevel.Trace : LogLevel.Information;
             using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled).SetMinimumLevel(verbosity));
 
-            await ContainerBuilder.ContainerizeAsync(
+            return await ContainerBuilder.ContainerizeAsync(
                 _publishDir,
                 _workingDir,
                 _baseReg,
