@@ -8,19 +8,19 @@ namespace containerize;
 
 internal class Program
 {
-    private static readonly Dictionary<string, Func<CliRootCommand>> CommandFactory = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, Func<CliRootCommand>> s_commandFactory = new(StringComparer.OrdinalIgnoreCase)
     {
         [nameof(CreateNewImage)] = () => new ContainerizeCommand(),
-        [nameof(PushImageToRegistry)] = () => throw new NotImplementedException("TODO - create command for pushing")
+        [nameof(PushImageToRegistry)] = () => new PushImageToRegistryCommand()
     };
 
     private static Task<int> Main(string[] args)
     {
         try
         {
-            if (args.Length <= 0 || !CommandFactory.TryGetValue(args[0], out var factory))
+            if (args.Length <= 0 || !s_commandFactory.TryGetValue(args[0], out var factory))
             {
-                string commands = string.Join(", ", CommandFactory.Keys);
+                string commands = string.Join(", ", s_commandFactory.Keys);
                 throw new ArgumentException($"Expected the first argument to be a valid command: {commands}");
             }
 
