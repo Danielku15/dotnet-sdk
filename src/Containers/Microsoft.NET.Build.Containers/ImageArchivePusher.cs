@@ -84,7 +84,7 @@ public class ImageArchivePusher
         }
     }
 
-    private async Task ExtractArchiveAsync(CancellationToken cancellationToken)
+    internal async Task ExtractArchiveAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -145,7 +145,7 @@ public class ImageArchivePusher
     }
 
 
-    private Task<DestinationImageReference[]?> BuildDestinationImageReferencesAsync(CancellationToken cancellationToken)
+    internal Task<DestinationImageReference[]?> BuildDestinationImageReferencesAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
