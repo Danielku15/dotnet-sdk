@@ -167,6 +167,16 @@
         <target state="translated">호스트 개체가 검색되지 않았습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageArchivePusher_InvalidAnnotations">
+        <source>CONTAINER3006: No '{0}' annotations found defining repositories and tags for pushing.</source>
+        <target state="new">CONTAINER3006: No '{0}' annotations found defining repositories and tags for pushing.</target>
+        <note>{StrBegin="CONTAINER3006: "}</note>
+      </trans-unit>
+      <trans-unit id="ImageArchivePusher_WrongAnnotationContent">
+        <source>CONTAINER3007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</source>
+        <target state="new">CONTAINER3007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</target>
+        <note>{StrBegin="CONTAINER3007: "}</note>
+      </trans-unit>
       <trans-unit id="ImageLoadFailed">
         <source>CONTAINER1009: Failed to load image from local registry. stdout: {0}</source>
         <target state="translated">CONTAINER1009: 로컬 레지스트리에서 이미지를 로드하지 못했습니다. stdout: {0}</target>

@@ -347,7 +347,14 @@
     <value>CONTAINER3005: Failed to push archive to registry: {0}.</value>
     <comment>{StrBegin="CONTAINER3005: "}</comment>
   </data>
-
+  <data name="ImageArchivePusher_InvalidAnnotations" xml:space="preserve">
+    <value>CONTAINER3006: No '{0}' annotations found defining repositories and tags for pushing.</value>
+    <comment>{StrBegin="CONTAINER3006: "}</comment>
+  </data>
+  <data name="ImageArchivePusher_WrongAnnotationContent" xml:space="preserve">
+    <value>CONTAINER3007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</value>
+    <comment>{StrBegin="CONTAINER3007: "}</comment>
+  </data>
   <data name="_Test" xml:space="preserve">
     <value>CONTAINER0000: Value for unit test {0}</value>
     <comment>Used only for unit tests</comment>
@@ -428,7 +435,7 @@
     <value>local registry via '{0}'</value>
     <comment>{0} is the command used</comment>
   </data>
-    <data name="ErrorDetails" xml:space="preserve">
+  <data name="ErrorDetails" xml:space="preserve">
     <value>Error Details '{0}'</value>
     <comment>{0} is the exception</comment>
   </data>

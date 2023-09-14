@@ -367,6 +367,24 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3006: No &apos;{0}&apos; annotations found defining repositories and tags for pushing..
+        /// </summary>
+        internal static string ImageArchivePusher_InvalidAnnotations {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_InvalidAnnotations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER3007: Unsupported format for annotation &apos;{0}&apos;. Only &apos;repository:tag&apos; is supported but found following values: {1}..
+        /// </summary>
+        internal static string ImageArchivePusher_WrongAnnotationContent {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_WrongAnnotationContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONTAINER1009: Failed to load image from local registry. stdout: {0}.
         /// </summary>
         internal static string ImageLoadFailed {

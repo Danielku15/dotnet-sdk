@@ -218,7 +218,8 @@ public class ImageArchivePusher
 
         if (allTags.Length == 0)
         {
-            throw new FormatException($"No '{OciAnnotations.AnnotationRefName}' annotations found defining repositories and tags for pushing");
+            throw new FormatException(DiagnosticMessage.ErrorFromResourceWithCode(
+                nameof(Strings.ImageArchivePusher_InvalidAnnotations), OciAnnotations.AnnotationRefName));
         }
 
 
@@ -228,14 +229,15 @@ public class ImageArchivePusher
         {
             if (repositoryAndTag.Length != 2)
             {
-                invalidTags.AppendLine(
-                    $"Only '{OciAnnotations.AnnotationRefName}' annotations with format 'repository:tag' are supported");
+                invalidTags.Append(string.Join(':', repositoryAndTag));
             }
         }
 
         if (invalidTags.Length > 0)
         {
-            throw new FormatException(invalidTags.ToString());
+            throw new FormatException(DiagnosticMessage.ErrorFromResourceWithCode(
+                nameof(Strings.ImageArchivePusher_WrongAnnotationContent), OciAnnotations.AnnotationRefName,
+                string.Join(", ", invalidTags)));
         }
 
         return allTags.Select(t => (repository: t[0], tag: t[1]));
