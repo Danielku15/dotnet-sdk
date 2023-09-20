@@ -106,33 +106,6 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3004: Failed to cleanup extracted archive after push: {0}..
-        /// </summary>
-        internal static string ArchiveCleanupFailed {
-            get {
-                return ResourceManager.GetString("ArchiveCleanupFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3002: Failed to load extract image archive: {0}..
-        /// </summary>
-        internal static string ArchiveExtractionFailed {
-            get {
-                return ResourceManager.GetString("ArchiveExtractionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3005: Failed to push archive to registry: {0}..
-        /// </summary>
-        internal static string ArchivePushFailed {
-            get {
-                return ResourceManager.GetString("ArchivePushFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to local archive at &apos;{0}&apos; as {1} .
         /// </summary>
         internal static string ArchiveRegistry_PushInfo {
@@ -367,7 +340,34 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3006: No &apos;{0}&apos; annotations found defining repositories and tags for pushing..
+        ///   Looks up a localized string similar to CONTAINER5004: Failed to cleanup extracted archive after push: {0}..
+        /// </summary>
+        internal static string ImageArchivePusher_ArchiveCleanupFailed {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_ArchiveCleanupFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5002: Failed to load extract image archive: {0}..
+        /// </summary>
+        internal static string ImageArchivePusher_ArchiveExtractionFailed {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_ArchiveExtractionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5005: Failed to push archive to registry: {0}..
+        /// </summary>
+        internal static string ImageArchivePusher_ArchivePushFailed {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_ArchivePushFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5006: No &apos;{0}&apos; annotations found defining repositories and tags for pushing..
         /// </summary>
         internal static string ImageArchivePusher_InvalidAnnotations {
             get {
@@ -376,7 +376,25 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3007: Unsupported format for annotation &apos;{0}&apos;. Only &apos;repository:tag&apos; is supported but found following values: {1}..
+        ///   Looks up a localized string similar to CONTAINER5003: Failed to load image information from archive: {0}..
+        /// </summary>
+        internal static string ImageArchivePusher_LoadingRepositoryAndTagsFromArchiveFailed {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_LoadingRepositoryAndTagsFromArchiveFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5001: &apos;{0}&apos; and &apos;{1}&apos; cannot be specified partially. Specify none to load information from archive, or both to override the archive values..
+        /// </summary>
+        internal static string ImageArchivePusher_RepositoryAndTagsProvidedPartially {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_RepositoryAndTagsProvidedPartially", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5007: Unsupported format for annotation &apos;{0}&apos;. Only &apos;repository:tag&apos; is supported but found following values: {1}..
         /// </summary>
         internal static string ImageArchivePusher_WrongAnnotationContent {
             get {
@@ -507,15 +525,6 @@ namespace Microsoft.NET.Build.Containers.Resources {
         internal static string ItemsWithoutMetadata {
             get {
                 return ResourceManager.GetString("ItemsWithoutMetadata", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3003: Failed to load image information from archive: {0}..
-        /// </summary>
-        internal static string LoadingRepositoryAndTagsFromArchiveFailed {
-            get {
-                return ResourceManager.GetString("LoadingRepositoryAndTagsFromArchiveFailed", resourceCulture);
             }
         }
         
@@ -723,15 +732,6 @@ namespace Microsoft.NET.Build.Containers.Resources {
         internal static string RegistryPushFailed {
             get {
                 return ResourceManager.GetString("RegistryPushFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CONTAINER3001: &apos;{0}&apos; and &apos;{1}&apos; cannot be specified partially. Specify none to load information from archive, or both to override the archive values..
-        /// </summary>
-        internal static string RepositoryAndTagsProvidedPartially {
-            get {
-                return ResourceManager.GetString("RepositoryAndTagsProvidedPartially", resourceCulture);
             }
         }
         

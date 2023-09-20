@@ -22,21 +22,6 @@
         <target state="translated">CONTAINER2026: ContainerAppCommandInstruction이 '{0}'인 경우 ContainerAppCommand 및 ContainerAppCommandArgs가 비어 있어야 합니다.</target>
         <note>{StrBegin="CONTAINER2026: "}</note>
       </trans-unit>
-      <trans-unit id="ArchiveCleanupFailed">
-        <source>CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</source>
-        <target state="new">CONTAINER3004: Failed to cleanup extracted archive after push: {0}.</target>
-        <note>{StrBegin="CONTAINER3004: "}</note>
-      </trans-unit>
-      <trans-unit id="ArchiveExtractionFailed">
-        <source>CONTAINER3002: Failed to load extract image archive: {0}.</source>
-        <target state="new">CONTAINER3002: Failed to load extract image archive: {0}.</target>
-        <note>{StrBegin="CONTAINER3002: "}</note>
-      </trans-unit>
-      <trans-unit id="ArchivePushFailed">
-        <source>CONTAINER3005: Failed to push archive to registry: {0}.</source>
-        <target state="new">CONTAINER3005: Failed to push archive to registry: {0}.</target>
-        <note>{StrBegin="CONTAINER3005: "}</note>
-      </trans-unit>
       <trans-unit id="ArchiveRegistry_PushInfo">
         <source>local archive at '{0}' as {1} </source>
         <target state="new">local archive at '{0}' as {1} </target>
@@ -167,15 +152,40 @@
         <target state="translated">호스트 개체가 검색되지 않았습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageArchivePusher_ArchiveCleanupFailed">
+        <source>CONTAINER5004: Failed to cleanup extracted archive after push: {0}.</source>
+        <target state="new">CONTAINER5004: Failed to cleanup extracted archive after push: {0}.</target>
+        <note>{StrBegin="CONTAINER5004: "}</note>
+      </trans-unit>
+      <trans-unit id="ImageArchivePusher_ArchiveExtractionFailed">
+        <source>CONTAINER5002: Failed to load extract image archive: {0}.</source>
+        <target state="new">CONTAINER5002: Failed to load extract image archive: {0}.</target>
+        <note>{StrBegin="CONTAINER5002: "}</note>
+      </trans-unit>
+      <trans-unit id="ImageArchivePusher_ArchivePushFailed">
+        <source>CONTAINER5005: Failed to push archive to registry: {0}.</source>
+        <target state="new">CONTAINER5005: Failed to push archive to registry: {0}.</target>
+        <note>{StrBegin="CONTAINER5005: "}</note>
+      </trans-unit>
       <trans-unit id="ImageArchivePusher_InvalidAnnotations">
-        <source>CONTAINER3006: No '{0}' annotations found defining repositories and tags for pushing.</source>
-        <target state="new">CONTAINER3006: No '{0}' annotations found defining repositories and tags for pushing.</target>
-        <note>{StrBegin="CONTAINER3006: "}</note>
+        <source>CONTAINER5006: No '{0}' annotations found defining repositories and tags for pushing.</source>
+        <target state="new">CONTAINER5006: No '{0}' annotations found defining repositories and tags for pushing.</target>
+        <note>{StrBegin="CONTAINER5006: "}</note>
+      </trans-unit>
+      <trans-unit id="ImageArchivePusher_LoadingRepositoryAndTagsFromArchiveFailed">
+        <source>CONTAINER5003: Failed to load image information from archive: {0}.</source>
+        <target state="new">CONTAINER5003: Failed to load image information from archive: {0}.</target>
+        <note>{StrBegin="CONTAINER5003: "}</note>
+      </trans-unit>
+      <trans-unit id="ImageArchivePusher_RepositoryAndTagsProvidedPartially">
+        <source>CONTAINER5001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</source>
+        <target state="new">CONTAINER5001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</target>
+        <note>{StrBegin="CONTAINER5001: "}</note>
       </trans-unit>
       <trans-unit id="ImageArchivePusher_WrongAnnotationContent">
-        <source>CONTAINER3007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</source>
-        <target state="new">CONTAINER3007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</target>
-        <note>{StrBegin="CONTAINER3007: "}</note>
+        <source>CONTAINER5007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</source>
+        <target state="new">CONTAINER5007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</target>
+        <note>{StrBegin="CONTAINER5007: "}</note>
       </trans-unit>
       <trans-unit id="ImageLoadFailed">
         <source>CONTAINER1009: Failed to load image from local registry. stdout: {0}</source>
@@ -246,11 +256,6 @@
         <source>CONTAINER4005: Item '{0}' contains items without metadata 'Value', and they will be ignored.</source>
         <target state="translated">CONTAINER4005: 항목 '{0}'에는 메타데이터 '값'이 없는 항목이 포함되어 있으며 무시됩니다.</target>
         <note>{StrBegin="CONTAINER4005: "}</note>
-      </trans-unit>
-      <trans-unit id="LoadingRepositoryAndTagsFromArchiveFailed">
-        <source>CONTAINER3003: Failed to load image information from archive: {0}.</source>
-        <target state="new">CONTAINER3003: Failed to load image information from archive: {0}.</target>
-        <note>{StrBegin="CONTAINER3003: "}</note>
       </trans-unit>
       <trans-unit id="LocalRegistryNotAvailable">
         <source>CONTAINER1012: The local registry is not available, but pushing to a local registry was requested.</source>
@@ -366,11 +371,6 @@
         <source>Uploaded tag '{0}' to '{1}'.</source>
         <target state="translated">'{1}'에 '{0}' 태그를 업로드했습니다.</target>
         <note>{1} is the registry name</note>
-      </trans-unit>
-      <trans-unit id="RepositoryAndTagsProvidedPartially">
-        <source>CONTAINER3001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</source>
-        <target state="new">CONTAINER3001: '{0}' and '{1}' cannot be specified partially. Specify none to load information from archive, or both to override the archive values.</target>
-        <note>{StrBegin="CONTAINER3001: "}</note>
       </trans-unit>
       <trans-unit id="RequiredItemsContainsEmptyItems">
         <source>CONTAINER4003: Required '{0}' items contain empty items.</source>

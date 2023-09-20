@@ -66,7 +66,7 @@ public class ImageArchivePusher
         }
         catch (Exception e)
         {
-            LogErrorWithCodeFromResources(e, nameof(Strings.ArchivePushFailed), e.Message);
+            LogErrorWithCodeFromResources(e, nameof(Strings.ImageArchivePusher_ArchivePushFailed), e.Message);
         }
         finally
         {
@@ -79,7 +79,7 @@ public class ImageArchivePusher
             }
             catch (Exception e)
             {
-                LogErrorWithCodeFromResources(e, nameof(Strings.ArchiveCleanupFailed), e.Message);
+                LogErrorWithCodeFromResources(e, nameof(Strings.ImageArchivePusher_ArchiveCleanupFailed), e.Message);
             }
         }
     }
@@ -95,7 +95,7 @@ public class ImageArchivePusher
         }
         catch (Exception e)
         {
-            LogErrorWithCodeFromResources(e, nameof(Strings.ArchiveExtractionFailed), e.Message);
+            LogErrorWithCodeFromResources(e, nameof(Strings.ImageArchivePusher_ArchiveExtractionFailed), e.Message);
         }
     }
 
@@ -169,7 +169,7 @@ public class ImageArchivePusher
         // partially provided -> error
         else
         {
-            LogErrorWithCodeFromResources(nameof(Strings.RepositoryAndTagsProvidedPartially), nameof(_repository), nameof(_imageTags));
+            LogErrorWithCodeFromResources(nameof(Strings.ImageArchivePusher_RepositoryAndTagsProvidedPartially), nameof(_repository), nameof(_imageTags));
             return Task.FromResult<DestinationImageReference[]?>(null);
         }
     }
@@ -187,7 +187,7 @@ public class ImageArchivePusher
         }
         catch (Exception e)
         {
-            LogErrorWithCodeFromResources(nameof(Strings.LoadingRepositoryAndTagsFromArchiveFailed), e.Message);
+            LogErrorWithCodeFromResources(nameof(Strings.ImageArchivePusher_LoadingRepositoryAndTagsFromArchiveFailed), e.Message);
             return null;
         }
     }
