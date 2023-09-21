@@ -115,14 +115,214 @@ public class ImageArchivePusherTests
         await pusher.BuildDestinationImageReferencesAsync(default);
         Assert.True(pusher.HasErrors);
     }
+
     [Fact]
-    public async Task BuildDestinationImageReferences_LoadFromImageConfiguration_InvalidMix()
+    public async Task BuildDestinationImageReferences_LoadFromImageConfiguration_OverrideRepository_Valid()
     {
         // Arrange
-        string imageArchivePath = await CreateTestArchiveAsync(null);
+        string imageArchivePath = await CreateTestArchiveAsync(new OciImageIndex
+        {
+            SchemaVersion = 2,
+            MediaType = "application/vnd.oci.image.index.v1+json",
+            Manifests = new List<OciImageManifestDescriptor>
+            {
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:latest"
+                    }
+                },
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:v2"
+                    }
+                }
+            }
+        });
         ImageArchivePusher pusher = new(_loggerFactory, imageArchivePath,
             DockerRegistryManager.LocalRegistry,
-            null, null
+            "new-image", null
+        );
+
+        // Act
+        await pusher.ExtractArchiveAsync(default);
+        var destinations = await pusher.BuildDestinationImageReferencesAsync(default);
+        Assert.False(pusher.HasErrors);
+
+        // Assert
+        Assert.False(pusher.HasErrors);
+        Assert.NotNull(destinations);
+        Assert.Collection(destinations,
+            destination1 =>
+            {
+                Assert.Equal("new-image", destination1.Repository);
+                Assert.Collection(destination1.Tags,
+                    x => Assert.Equal("latest", x),
+                    x => Assert.Equal("v2", x)
+                );
+                Assert.Equal(DestinationImageReferenceKind.RemoteRegistry, destination1.Kind);
+                Assert.NotNull(destination1.RemoteRegistry);
+            });
+    }
+
+
+    [Fact]
+    public async Task BuildDestinationImageReferences_LoadFromImageConfiguration_OverrideRepository_InValid()
+    {
+        // Arrange
+        string imageArchivePath = await CreateTestArchiveAsync(new OciImageIndex
+        {
+            SchemaVersion = 2,
+            MediaType = "application/vnd.oci.image.index.v1+json",
+            Manifests = new List<OciImageManifestDescriptor>
+            {
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:latest"
+                    }
+                },
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image2:v2"
+                    }
+                }
+            }
+        });
+        ImageArchivePusher pusher = new(_loggerFactory, imageArchivePath,
+            DockerRegistryManager.LocalRegistry,
+            "new-image", null
+        );
+
+        // Act
+        await pusher.ExtractArchiveAsync(default);
+        Assert.False(pusher.HasErrors);
+
+        // Assert
+        await pusher.BuildDestinationImageReferencesAsync(default);
+        Assert.True(pusher.HasErrors);
+    }
+
+    [Fact]
+    public async Task BuildDestinationImageReferences_LoadFromImageConfiguration_OverrideTags_Valid()
+    {
+        // Arrange
+        string imageArchivePath = await CreateTestArchiveAsync(new OciImageIndex
+        {
+            SchemaVersion = 2,
+            MediaType = "application/vnd.oci.image.index.v1+json",
+            Manifests = new List<OciImageManifestDescriptor>
+            {
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:latest"
+                    }
+                },
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:v2"
+                    }
+                }
+            }
+        });
+        ImageArchivePusher pusher = new(_loggerFactory, imageArchivePath,
+            DockerRegistryManager.LocalRegistry,
+            null, new[]{"v2-latest", "v2.0"}
+        );
+
+        // Act
+        await pusher.ExtractArchiveAsync(default);
+        var destinations = await pusher.BuildDestinationImageReferencesAsync(default);
+        Assert.False(pusher.HasErrors);
+
+        // Assert
+        Assert.False(pusher.HasErrors);
+        Assert.NotNull(destinations);
+        Assert.Collection(destinations,
+            destination1 =>
+            {
+                Assert.Equal("image", destination1.Repository);
+                Assert.Collection(destination1.Tags,
+                    x => Assert.Equal("v2-latest", x),
+                    x => Assert.Equal("v2.0", x)
+                );
+                Assert.Equal(DestinationImageReferenceKind.RemoteRegistry, destination1.Kind);
+                Assert.NotNull(destination1.RemoteRegistry);
+            });
+    }
+
+
+    [Fact]
+    public async Task BuildDestinationImageReferences_LoadFromImageConfiguration_OverrideTags_InValid()
+    {
+        // Arrange
+        string imageArchivePath = await CreateTestArchiveAsync(new OciImageIndex
+        {
+            SchemaVersion = 2,
+            MediaType = "application/vnd.oci.image.index.v1+json",
+            Manifests = new List<OciImageManifestDescriptor>
+            {
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image:latest"
+                    }
+                },
+                new()
+                {
+                    // "Test"
+                    Size = 4,
+                    Digest = "sha256:532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25",
+                    MediaType = "application/vnd.oci.image.manifest.v1+json",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        [OciAnnotations.AnnotationRefName] = "image2:v2"
+                    }
+                }
+            }
+        });
+        ImageArchivePusher pusher = new(_loggerFactory, imageArchivePath,
+            DockerRegistryManager.LocalRegistry,
+            null, new[]{"v2-latest", "v2.0"}
         );
 
         // Act

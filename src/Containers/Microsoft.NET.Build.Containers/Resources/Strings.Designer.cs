@@ -385,6 +385,24 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5008: There are multiple repository names and tags in the archive. A custom repository name with default tags can only be used there is a single unique repository name contained..
+        /// </summary>
+        internal static string ImageArchivePusher_MultipleRepositoriesInFile_CustomRepository {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_MultipleRepositoriesInFile_CustomRepository", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTAINER5009: There are multiple repository names and tags in the archive. Custom tags with default repository name can only be provided if there is a single unique repository name..
+        /// </summary>
+        internal static string ImageArchivePusher_MultipleRepositoriesInFile_CustomTags {
+            get {
+                return ResourceManager.GetString("ImageArchivePusher_MultipleRepositoriesInFile_CustomTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONTAINER5001: &apos;{0}&apos; and &apos;{1}&apos; cannot be specified partially. Specify none to load information from archive, or both to override the archive values..
         /// </summary>
         internal static string ImageArchivePusher_RepositoryAndTagsProvidedPartially {

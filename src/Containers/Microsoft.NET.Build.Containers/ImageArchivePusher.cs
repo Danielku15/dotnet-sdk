@@ -145,32 +145,84 @@ public class ImageArchivePusher
     }
 
 
-    internal Task<DestinationImageReference[]?> BuildDestinationImageReferencesAsync(CancellationToken cancellationToken)
+    internal async Task<DestinationImageReference[]?> BuildDestinationImageReferencesAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         // Nothing provided -> We load the information from the OCI archive and build the destinations
         if (string.IsNullOrEmpty(_repository) && _imageTags == null)
         {
-            return TryLoadDestinationsFromOciImageAsync(cancellationToken);
+            return await TryLoadDestinationsFromOciImageAsync(cancellationToken);
         }
         // everything provided -> Push accordingly
         else if (!string.IsNullOrEmpty(_repository) && _imageTags is { Length: > 0 })
         {
-            return Task.FromResult<DestinationImageReference[]?>(new[]
+            return new[]
             {
                 DestinationImageReference.CreateFromSettings(
                     _repository,
                     _imageTags,
                     _loggerFactory,
                     _registry)
-            });
+            };
+        }
+        // only repository name provided, tags from archive
+        else if (!string.IsNullOrEmpty(_repository) && _imageTags == null)
+        {
+            var all = await TryLoadDestinationsFromOciImageAsync(cancellationToken);
+            if (all == null)
+            {
+                return null;
+            }
+
+            // Only if we only have one repository name with multiple tags we can take a user defined repository as override
+            if (all.Length != 1)
+            {
+                LogErrorWithCodeFromResources(
+                    nameof(Strings.ImageArchivePusher_MultipleRepositoriesInFile_CustomRepository));
+                return null;
+            }
+
+            return new[]
+            {
+                DestinationImageReference.CreateFromSettings(
+                    _repository,
+                    all[0].Tags,
+                    _loggerFactory,
+                    _registry)
+            };
+        }
+        // only tags name provided, repository from archive
+        else if (string.IsNullOrEmpty(_repository) && _imageTags is { Length: > 0 })
+        {
+            var all = await TryLoadDestinationsFromOciImageAsync(cancellationToken);
+            if (all == null)
+            {
+                return null;
+            }
+
+            // Only if we only have one repository name with multiple tags we can take a user defined repository as override
+            if (all.Length != 1)
+            {
+                LogErrorWithCodeFromResources(
+                    nameof(Strings.ImageArchivePusher_MultipleRepositoriesInFile_CustomTags));
+                return null;
+            }
+
+            return new[]
+            {
+                DestinationImageReference.CreateFromSettings(
+                    all[0].Repository,
+                    _imageTags,
+                    _loggerFactory,
+                    _registry)
+            };
         }
         // partially provided -> error
         else
         {
             LogErrorWithCodeFromResources(nameof(Strings.ImageArchivePusher_RepositoryAndTagsProvidedPartially), nameof(_repository), nameof(_imageTags));
-            return Task.FromResult<DestinationImageReference[]?>(null);
+            return null;
         }
     }
     private async Task<DestinationImageReference[]?> TryLoadDestinationsFromOciImageAsync(CancellationToken cancellationToken)

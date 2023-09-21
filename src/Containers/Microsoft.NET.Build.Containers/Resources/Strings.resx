@@ -355,6 +355,14 @@
     <value>CONTAINER5007: Unsupported format for annotation '{0}'. Only 'repository:tag' is supported but found following values: {1}.</value>
         <comment>{StrBegin="CONTAINER5007: "}</comment>
   </data>
+  <data name="ImageArchivePusher_MultipleRepositoriesInFile_CustomRepository" xml:space="preserve">
+    <value>CONTAINER5008: There are multiple repository names and tags in the archive. A custom repository name with default tags can only be used there is a single unique repository name contained.</value>
+        <comment>{StrBegin="CONTAINER5008: "}</comment>
+  </data>
+<data name="ImageArchivePusher_MultipleRepositoriesInFile_CustomTags" xml:space="preserve">
+    <value>CONTAINER5009: There are multiple repository names and tags in the archive. Custom tags with default repository name can only be provided if there is a single unique repository name.</value>
+        <comment>{StrBegin="CONTAINER5009: "}</comment>
+  </data>  
   <data name="_Test" xml:space="preserve">
     <value>CONTAINER0000: Value for unit test {0}</value>
         <comment>Used only for unit tests</comment>
