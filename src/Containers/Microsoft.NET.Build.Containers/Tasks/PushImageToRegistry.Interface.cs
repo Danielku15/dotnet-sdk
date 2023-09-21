@@ -39,7 +39,6 @@ partial class PushImageToRegistry
     /// If not provided the tags will be extracted from the "org.opencontainers.image.ref.name"
     /// annotation in the archive.
     /// </summary>
-    [Required]
     public string[]? ImageTags { get; set; }
 
     public PushImageToRegistry()
