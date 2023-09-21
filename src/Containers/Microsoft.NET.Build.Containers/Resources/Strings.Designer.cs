@@ -439,6 +439,15 @@ namespace Microsoft.NET.Build.Containers.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTAINER2030: Invalid {0} are provided. Possible values are {1}..
+        /// </summary>
+        internal static string InvalidContainerImageArchiveFormat {
+            get {
+                return ResourceManager.GetString("InvalidContainerImageArchiveFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONTAINER2015: {0}: &apos;{1}&apos; was not a valid Environment Variable. Ignoring..
         /// </summary>
         internal static string InvalidEnvVar {
